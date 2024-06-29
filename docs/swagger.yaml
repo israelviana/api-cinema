@@ -1,0 +1,305 @@
+basePath: /
+definitions:
+  domain.HTTPErrorResponse:
+    properties:
+      error:
+        items:
+          type: integer
+        type: array
+      errorMessage:
+        type: string
+      message:
+        type: string
+    type: object
+  domain.Movie:
+    properties:
+      director:
+        type: string
+      duration:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  domain.MovieTheater:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      movies:
+        items:
+          $ref: '#/definitions/domain.Movie'
+        type: array
+      theater_number:
+        type: integer
+    type: object
+  domain.MovieTheaterShowing:
+    properties:
+      movie_id:
+        type: integer
+      movie_theater_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for cinema operations.
+  title: API-CINEMA
+  version: "1.0"
+paths:
+  /associate:
+    post:
+      consumes:
+      - application/json
+      description: Associate a movie at movie theater
+      parameters:
+      - description: Movie associate at movie theater
+        in: body
+        name: MovieTheaterShowing
+        required: true
+        schema:
+          $ref: '#/definitions/domain.MovieTheaterShowing'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Associate a movie at movie theater
+      tags:
+      - movie_theaters
+  /movie_theaters:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all movie theaters
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.MovieTheater'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Get all movie theaters
+      tags:
+      - movie_theaters
+    post:
+      consumes:
+      - application/json
+      description: Create a new movie theater
+      parameters:
+      - description: Movie Theater to create
+        in: body
+        name: movieTheater
+        required: true
+        schema:
+          $ref: '#/definitions/domain.MovieTheater'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.MovieTheater'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Create a new movie theater
+      tags:
+      - movie_theaters
+    put:
+      consumes:
+      - application/json
+      description: Update an existing movie theater
+      parameters:
+      - description: Movie Theater to update
+        in: body
+        name: movieTheater
+        required: true
+        schema:
+          $ref: '#/definitions/domain.MovieTheater'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.MovieTheater'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Update an existing movie theater
+      tags:
+      - movie_theaters
+  /movie_theaters/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a movie theater by its ID
+      parameters:
+      - description: Movie Theater ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.MovieTheater'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find a movie theater by ID
+      tags:
+      - movie_theaters
+  /movies:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a movie
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Delete a movie
+      tags:
+      - movies
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all movies
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Movie'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Get all movies
+      tags:
+      - movies
+    put:
+      consumes:
+      - application/json
+      description: Update an existing movie in the theater
+      parameters:
+      - description: Movie to update
+        in: body
+        name: movie
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Movie'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Movie'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Update an existing movie
+      tags:
+      - movies
+  /movies/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a movie by its ID
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Movie'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+        "404":
+          description: Movie not found
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Find a movie by ID
+      tags:
+      - movies
+    post:
+      consumes:
+      - application/json
+      description: Create a new movie in the theater
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Movie'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+        "404":
+          description: Movie not found
+          schema:
+            $ref: '#/definitions/domain.HTTPErrorResponse'
+      summary: Create a new movie
+      tags:
+      - movies
+swagger: "2.0"

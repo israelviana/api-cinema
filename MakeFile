@@ -1,0 +1,15 @@
+# Makefile
+
+include .env
+export
+
+.PHONY: migrate create_db
+
+
+migrate: create_db
+	@echo "Executando migrações SQL..."
+	migrate -database "mysql://$(DB_USER):$(DB_PASS)@tcp($(DB_HOST):$(DB_PORT))/$(DB_NAME)" -path pkg/db/migrations up
+
+create_db:
+	@echo "Criando banco de dados se não existir..."
+	mysql -u$(DB_USER) -p$(DB_PASS) -h$(DB_HOST) -P$(DB_PORT) -e "CREATE DATABASE IF NOT EXISTS $(DB_NAME);"
